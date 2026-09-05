@@ -1,0 +1,12 @@
+**/__pycache__/
+**/*.pyc
+backend/.venv/
+backend/.env
+logs/Audio/*
+!logs/Audio/.gitkeep
+logs/Text/*
+!logs/Text/.gitkeep
+logs/log.csv
+.git/
+.gitignore
+*.zip

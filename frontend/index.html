@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>گفتار به نوشتار</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="tile-bg" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 40 40" width="28" height="28">
+        <path d="M20 6 L20 34 M12 12 L12 28 M28 12 L28 28 M6 17 L6 23 M34 17 L34 23"
+              stroke="currentColor" stroke-width="3.4" stroke-linecap="round" fill="none"/>
+      </svg>
+    </span>
+    <span class="brand-name" data-i18n="brandName">گفتار به نوشتار</span>
+  </div>
+
+  <div class="topbar-actions">
+    <span class="engine-dot" id="engineDot" title="وضعیت موتور تشخیص گفتار"></span>
+    <span class="engine-label" id="engineLabel" data-i18n="engineChecking">در حال بررسی موتور…</span>
+    <button class="lang-toggle" id="langToggle" type="button">EN</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <h1 data-i18n="heroTitle">صدا را بگو، تا برایت بنویسم</h1>
+    <p class="hero-sub" data-i18n="heroSub">یک فایل صوتی بارگذاری کن یا زنده صحبت کن؛ متن آن را همین‌جا دریافت می‌کنی.</p>
+  </section>
+
+  <section class="panel" id="inputPanel">
+    <div class="mode-tabs" role="tablist">
+      <button class="mode-tab is-active" id="tabUpload" data-i18n="tabUpload" role="tab" aria-selected="true">بارگذاری فایل</button>
+      <button class="mode-tab" id="tabRecord" data-i18n="tabRecord" role="tab" aria-selected="false">ضبط زنده</button>
+    </div>
+
+    <!-- ===== Upload mode ===== -->
+    <div class="mode-body" id="uploadMode">
+      <label class="dropzone" id="dropzone" for="fileInput">
+        <svg viewBox="0 0 24 24" width="30" height="30" class="dz-icon" aria-hidden="true">
+          <path fill="currentColor" d="M12 3l4.5 4.5-1.4 1.4L13 6.8V16h-2V6.8L8.9 8.9 7.5 7.5 12 3zM5 18h14v2H5v-2z"/>
+        </svg>
+        <span class="dz-text" data-i18n="dzMain">فایل صوتی را اینجا رها کن یا کلیک کن</span>
+        <span class="dz-sub" data-i18n="dzSub">WAV، MP3، M4A، OGG، WEBM — حداکثر ۵۰ مگابایت</span>
+        <input type="file" id="fileInput" accept="audio/*,.m4a,.webm,.ogg,.flac" hidden />
+      </label>
+      <div class="filepill" id="filePill" hidden>
+        <span id="fileName"></span>
+        <button type="button" id="fileClear" aria-label="حذف فایل">✕</button>
+      </div>
+
+      <div class="controls-row">
+        <label class="lang-select-label" for="langSelectUpload" data-i18n="langOfAudio">زبان فایل صوتی</label>
+        <select id="langSelectUpload" class="lang-select">
+          <option value="fa" selected data-i18n="langFa">فارسی</option>
+          <option value="en" data-i18n="langEn">انگلیسی</option>
+          <option value="auto" data-i18n="langAuto">تشخیص خودکار</option>
+        </select>
+        <button type="button" class="submit-btn" id="submitBtn" disabled data-i18n="submitBtn">تبدیل به متن</button>
+      </div>
+    </div>
+
+    <!-- ===== Live recording mode ===== -->
+    <div class="mode-body" id="recordMode" hidden>
+      <div class="controls-row" style="margin-top:0; margin-bottom:16px;">
+        <label class="lang-select-label" for="langSelectRecord" data-i18n="langOfAudio">زبان فایل صوتی</label>
+        <select id="langSelectRecord" class="lang-select">
+          <option value="fa" selected data-i18n="langFa">فارسی</option>
+          <option value="en" data-i18n="langEn">انگلیسی</option>
+          <option value="auto" data-i18n="langAuto">تشخیص خودکار</option>
+        </select>
+      </div>
+
+      <div class="recorder">
+        <button type="button" class="rec-btn" id="recBtn" aria-label="شروع ضبط">
+          <span class="rec-dot"></span>
+        </button>
+        <div class="rec-wave" id="recWave" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="rec-time" id="recTime">00:00</div>
+        <div class="rec-status" id="recStatus" data-i18n="recIdle">برای شروع ضبط زنده، دکمه را بزن</div>
+      </div>
+
+      <div class="live-text-wrap" id="liveTextWrap" hidden>
+        <div class="live-text-label">
+          <span class="live-dot"></span>
+          <span data-i18n="liveLabel">متن زنده</span>
+        </div>
+        <div class="live-text" id="liveText"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel result-panel" id="resultPanel" hidden>
+    <div class="result-head">
+      <h2 data-i18n="resultTitle">متن پیاده‌شده</h2>
+      <div class="result-meta" id="resultMeta"></div>
+    </div>
+    <textarea id="resultText" class="result-text" readonly dir="auto"></textarea>
+    <div class="result-actions">
+      <button type="button" id="copyBtn" data-i18n="copyBtn">کپی متن</button>
+      <button type="button" id="downloadBtn" data-i18n="downloadBtn">دانلود متن</button>
+    </div>
+  </section>
+
+  <div class="status-line" id="statusLine" hidden></div>
+</main>
+
+<footer class="foot">
+  <span data-i18n="footNote">فایل‌های صوتی و متنی و لاگ‌ها به‌صورت محلی روی سرور ذخیره می‌شوند.</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
